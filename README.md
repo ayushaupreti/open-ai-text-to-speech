@@ -5,4 +5,4 @@ It's extremely useful to have a UI for endpoints with audio that allow you to fi
 
 ## Web app
 
-This project can be found live at https://speechtextendpoints.netlify.app 
+This project is live at https://speechtextendpoints.netlify.app 
