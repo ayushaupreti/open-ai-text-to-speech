@@ -121,7 +121,11 @@ const App = () => {
         <p>
           Interact with the OpenAI text to speech endpoint. You can find
           documentation{" "}
-          <a href="https://platform.openai.com/docs/api-reference/audio/createSpeech">
+          <a
+            href="https://platform.openai.com/docs/api-reference/audio/createSpeech"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
             {" "}
             here
           </a>
@@ -145,7 +149,7 @@ const App = () => {
               },
             ]}
           >
-            <Input />
+            <Input disabled={fetchingAudio} />
           </Form.Item>
 
           <Form.Item
@@ -159,7 +163,12 @@ const App = () => {
             ]}
             style={{ marginBottom: "40px" }}
           >
-            <TextArea rows={8} showCount maxLength={4096} />
+            <TextArea
+              rows={8}
+              showCount
+              maxLength={4096}
+              disabled={fetchingAudio}
+            />
           </Form.Item>
 
           <Space size="large">
@@ -173,7 +182,11 @@ const App = () => {
                 },
               ]}
             >
-              <Select style={{ width: 150 }} options={voiceOptions} />
+              <Select
+                style={{ width: 150 }}
+                options={voiceOptions}
+                disabled={fetchingAudio}
+              />
             </Form.Item>
 
             <Form.Item
@@ -186,16 +199,24 @@ const App = () => {
                 },
               ]}
             >
-              <Select style={{ width: 150 }} options={modelOptions} />
+              <Select
+                style={{ width: 150 }}
+                options={modelOptions}
+                disabled={fetchingAudio}
+              />
             </Form.Item>
 
             <Form.Item label="Format" name="format">
-              <Select style={{ width: 150 }} options={formatOptions} />
+              <Select
+                style={{ width: 150 }}
+                options={formatOptions}
+                disabled={fetchingAudio}
+              />
             </Form.Item>
           </Space>
 
           <Form.Item label="Speed" name="speed">
-            <Slider min={0.25} max={4.0} step={0.01} />
+            <Slider min={0.25} max={4.0} step={0.01} disabled={fetchingAudio} />
           </Form.Item>
 
           {!audioUrl && !error && (
@@ -236,7 +257,13 @@ const App = () => {
             title={
               <>
                 Find pricing information{" "}
-                <a href="https://openai.com/pricing">here</a>
+                <a
+                  href="https://openai.com/pricing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  here
+                </a>
               </>
             }
             placement="bottom"
