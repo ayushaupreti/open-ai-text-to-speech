@@ -66,9 +66,9 @@ const fetchAudioFileBlob = async (
 const calculateEstimatedUsage = (characters, model) => {
   switch (model) {
     case "tts-1":
-      return (0.015 * characters) / 1000;
+      return ((0.015 * characters) / 1000).toFixed(3);
     case "tts-1-hd":
-      return (0.03 * characters) / 1000;
+      return ((0.03 * characters) / 1000).toFixed(3);
     default:
       return 0;
   }
@@ -165,8 +165,10 @@ const App = () => {
           >
             <TextArea
               rows={8}
-              showCount
-              maxLength={4096}
+              count={{
+                show: true,
+                max: 4096,
+              }}
               disabled={fetchingAudio}
             />
           </Form.Item>
@@ -268,7 +270,8 @@ const App = () => {
             }
             placement="bottom"
           >
-            Estimated cost: ${calculateEstimatedUsage(textLength, modelType)}
+            Estimated cost: ${calculateEstimatedUsage(textLength, modelType)}{" "}
+            USD
           </Tooltip>
         )}
       </div>
