@@ -82,11 +82,6 @@ const App = () => {
     if (speechData) {
       const url = URL.createObjectURL(speechData);
       setAudioUrl(url);
-      // const link = document.createElement("a");
-      // link.href = url;
-      // link.setAttribute("download", "speech.mp3");
-      // document.body.appendChild(link);
-      // link.click();
     } else {
       setError("Error fetching audio");
     }
@@ -97,8 +92,8 @@ const App = () => {
       <div className="container">
         <h1 style={{ marginTop: 0 }}>OpenAI Text to Speech API</h1>
         <p>
-          Interact with the OpenAI endpoint for creating speech from text. You
-          can find documentation{" "}
+          Interact with the OpenAI text to speech endpoint. You can find
+          documentation{" "}
           <a href="https://platform.openai.com/docs/api-reference/audio/createSpeech">
             {" "}
             here
@@ -165,16 +160,7 @@ const App = () => {
               <Select style={{ width: 150 }} options={modelOptions} />
             </Form.Item>
 
-            <Form.Item
-              label="Format"
-              name="format"
-              rules={[
-                {
-                  required: true,
-                  message: "Please select a format!",
-                },
-              ]}
-            >
+            <Form.Item label="Format" name="format">
               <Select style={{ width: 150 }} options={formatOptions} />
             </Form.Item>
           </Space>
@@ -186,7 +172,7 @@ const App = () => {
           {!audioUrl && !error && (
             <Form.Item wrapperCol={{ span: 8, offset: 10 }}>
               <Button type="primary" htmlType="submit" loading={fetchingAudio}>
-                Generate Speech
+                Generate Audio File
               </Button>
             </Form.Item>
           )}
