@@ -117,7 +117,7 @@ const App = () => {
   return (
     <div className="App">
       <div className="container">
-        <h1 style={{ marginTop: 0 }}>OpenAI Text to Speech API</h1>
+        <h1 style={{ marginTop: 0 }}>OpenAI Text to Speech API Playground</h1>
         <p>
           Interact with the OpenAI text to speech endpoint. You can find
           documentation{" "}
@@ -164,7 +164,7 @@ const App = () => {
             style={{ marginBottom: "40px" }}
           >
             <TextArea
-              rows={8}
+              style={{ height: 300, resize: "none" }}
               count={{
                 show: true,
                 max: 4096,
