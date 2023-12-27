@@ -5,4 +5,4 @@ I think it's extremely useful to have a UI for endpoints with audio that allow y
 
 ## Web app
 
-This project is live at https://speechtextendpoints.netlify.app 
+This project is live at [speechtotextplayground.netlify.app](https://speechtotextplayground.netlify.app)
