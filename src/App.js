@@ -55,11 +55,9 @@ const fetchAudioFileBlob = async (
       data,
       { headers, responseType: "blob" }
     );
-    console.log(response);
-    return response.data;
+    return { type: "success", data: response.data };
   } catch (error) {
-    console.log(error);
-    return null;
+    return { type: "error", data: error.message };
   }
 };
 
@@ -99,7 +97,7 @@ const App = () => {
     setModelType(model);
 
     setFetchingAudio(true);
-    const speechData = await fetchAudioFileBlob(
+    const response = await fetchAudioFileBlob(
       model,
       text,
       voice,
@@ -108,11 +106,11 @@ const App = () => {
       apiKey
     );
     setFetchingAudio(false);
-    if (speechData) {
-      const url = URL.createObjectURL(speechData);
+    if (response.type === "success") {
+      const url = URL.createObjectURL(response.data);
       setAudioUrl(url);
     } else {
-      setError("Error fetching audio");
+      setError(`Error fetching audio: ${response.data}`);
     }
   };
 
