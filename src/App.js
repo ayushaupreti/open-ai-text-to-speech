@@ -1,5 +1,14 @@
 import React, { useState } from "react";
-import { Button, Form, Input, Slider, Select, Alert, Space } from "antd";
+import {
+  Button,
+  Form,
+  Input,
+  Slider,
+  Select,
+  Alert,
+  Space,
+  Tooltip,
+} from "antd";
 import AudioPlayer from "react-h5-audio-player";
 import axios from "axios";
 
@@ -46,9 +55,24 @@ const fetchAudioFileBlob = async (
       data,
       { headers, responseType: "blob" }
     );
+    console.log(response);
     return response.data;
   } catch (error) {
+    console.log(error);
     return null;
+  }
+};
+
+// TTS: $0.015 / 1K characters
+// TTS HD: $0.030 / 1K characters
+const calculateEstimatedUsage = (characters, model) => {
+  switch (model) {
+    case "tts-1":
+      return (0.015 * characters) / 1000;
+    case "tts-1-hd":
+      return (0.03 * characters) / 1000;
+    default:
+      return 0;
   }
 };
 
@@ -60,6 +84,8 @@ const App = () => {
   const [audioUrl, setAudioUrl] = useState();
   const [error, setError] = useState();
   const [fetchingAudio, setFetchingAudio] = useState(false);
+  const [textLength, setTextLength] = useState();
+  const [modelType, setModelType] = useState("");
 
   const onFinish = async (values) => {
     const model = values.model;
@@ -68,6 +94,9 @@ const App = () => {
     const format = values.format;
     const speed = values.speed;
     const apiKey = values.apiKey;
+
+    setTextLength(text.length);
+    setModelType(model);
 
     setFetchingAudio(true);
     const speechData = await fetchAudioFileBlob(
@@ -104,6 +133,7 @@ const App = () => {
             voice: voiceOptions[0].label,
             model: modelOptions[0].label,
             format: formatOptions[0].label,
+            speed: 1.0,
           }}
           onFinish={onFinish}
         >
@@ -130,7 +160,7 @@ const App = () => {
               },
             ]}
           >
-            <TextArea rows={8} />
+            <TextArea rows={8} showCount />
           </Form.Item>
 
           <Space size="large">
@@ -166,7 +196,7 @@ const App = () => {
           </Space>
 
           <Form.Item label="Speed" name="speed">
-            <Slider defaultValue={1.0} min={0.25} max={4.0} step={0.01} />
+            <Slider min={0.25} max={4.0} step={0.01} />
           </Form.Item>
 
           {!audioUrl && !error && (
@@ -177,10 +207,13 @@ const App = () => {
             </Form.Item>
           )}
         </Form>
+
         {error && <Alert message={error} type="error" />}
+
         {audioUrl && <AudioPlayer src={audioUrl} style={{ width: "75%" }} />}
-        {(audioUrl || error) && (
-          <Space>
+
+        <Space>
+          {(audioUrl || error) && (
             <Button
               type="link"
               onClick={() => {
@@ -190,11 +223,27 @@ const App = () => {
             >
               Reset
             </Button>
+          )}
 
+          {audioUrl && (
             <Button type="link" href={audioUrl} target="_blank" download>
               Download Audio File
             </Button>
-          </Space>
+          )}
+        </Space>
+
+        {audioUrl && (
+          <Tooltip
+            title={
+              <>
+                Find pricing information{" "}
+                <a href="https://openai.com/pricing">here</a>
+              </>
+            }
+            placement="bottom"
+          >
+            Estimated cost: ${calculateEstimatedUsage(textLength, modelType)}
+          </Tooltip>
         )}
       </div>
     </div>
