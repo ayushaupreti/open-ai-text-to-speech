@@ -154,9 +154,10 @@ const App = () => {
             rules={[
               {
                 required: true,
-                message: "Please input the text you wish to get speech for!",
+                message: "Please input some text to convert!",
               },
             ]}
+            style={{ marginBottom: "40px" }}
           >
             <TextArea rows={8} showCount />
           </Form.Item>
