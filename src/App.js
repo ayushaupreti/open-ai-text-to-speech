@@ -159,7 +159,7 @@ const App = () => {
             ]}
             style={{ marginBottom: "40px" }}
           >
-            <TextArea rows={8} showCount />
+            <TextArea rows={8} showCount maxLength={4096} />
           </Form.Item>
 
           <Space size="large">
