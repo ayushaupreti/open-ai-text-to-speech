@@ -10,7 +10,6 @@ This playground allows you to interact with the [create speech](https://platform
 ## To do list
 
 - specify filename when downloading
-- add input box for speed
 
 ## Web app
 
