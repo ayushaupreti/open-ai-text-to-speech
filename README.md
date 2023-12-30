@@ -5,7 +5,7 @@ I think it's extremely useful to have a UI for endpoints with audio that allow y
 
 ## Details
 
-This playground allows you to interact with the [create speech](https://platform.openai.com/docs/api-reference/audio/createSpeech) endpoint and adjust some parameters. It will then generate the audio file and allow you to preview it in the browser. You can then reset the options, or download the generated audio file.
+This playground allows you to interact with the OpenAI [create speech](https://platform.openai.com/docs/api-reference/audio/createSpeech) endpoint and adjust some parameters. It will then generate the audio file and allow you to preview it in the browser. You can also reset the options, or download the generated audio file.
 
 ## To do list
 
