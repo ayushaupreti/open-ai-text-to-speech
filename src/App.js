@@ -8,17 +8,21 @@ import {
   Alert,
   Space,
   Tooltip,
+  InputNumber,
+  Col,
+  Row,
 } from "antd";
 import AudioPlayer from "react-h5-audio-player";
 
 import { formats, models, voices } from "./utils/constants";
-import "react-h5-audio-player/lib/styles.css";
-import "./App.css";
 import {
   arrayToSelectOptions,
   calculateEstimatedUsage,
   fetchAudioFileBlob,
 } from "./utils/helpers";
+
+import "react-h5-audio-player/lib/styles.css";
+import "./App.css";
 
 const { TextArea } = Input;
 
@@ -32,6 +36,11 @@ const App = () => {
   const [fetchingAudio, setFetchingAudio] = useState(false);
   const [textLength, setTextLength] = useState();
   const [modelType, setModelType] = useState("");
+  const [speed, setSpeed] = useState(1.0);
+
+  const onSpeedChange = (newSpeed) => {
+    setSpeed(newSpeed);
+  };
 
   const onFinish = async (values) => {
     const model = values.model;
@@ -65,7 +74,7 @@ const App = () => {
   return (
     <div className="App">
       <div className="container">
-        <h1 style={{ marginTop: 0 }}>OpenAI Text to Speech API Playground</h1>
+        <h1>OpenAI Text to Speech API Playground</h1>
         <p>
           Interact with the OpenAI text to speech endpoint. You can find
           documentation{" "}
@@ -85,7 +94,11 @@ const App = () => {
             format: formatOptions[0].label,
             speed: 1.0,
           }}
+          labelCol={{ span: 8, offset: 0 }}
           onFinish={onFinish}
+          layout="vertical"
+          style={{ maxWidth: 900 }}
+          // disabled={fetchingAudio}
         >
           <Form.Item
             label="API Key"
@@ -121,56 +134,75 @@ const App = () => {
             />
           </Form.Item>
 
-          <Space size="large">
-            <Form.Item
-              label="Voice"
-              name="voice"
-              rules={[
-                {
-                  required: true,
-                  message: "Please select a voice!",
-                },
-              ]}
-            >
-              <Select
-                style={{ width: 150 }}
-                options={voiceOptions}
-                disabled={fetchingAudio}
-              />
-            </Form.Item>
+          <Form.Item
+            label="Voice"
+            name="voice"
+            rules={[
+              {
+                required: true,
+                message: "Please select a voice!",
+              },
+            ]}
+          >
+            <Select
+              style={{ maxWidth: 500 }}
+              options={voiceOptions}
+              disabled={fetchingAudio}
+            />
+          </Form.Item>
 
-            <Form.Item
-              label="Model"
-              name="model"
-              rules={[
-                {
-                  required: true,
-                  message: "Please select a model!",
-                },
-              ]}
-            >
-              <Select
-                style={{ width: 150 }}
-                options={modelOptions}
-                disabled={fetchingAudio}
-              />
-            </Form.Item>
+          <Form.Item
+            label="Model"
+            name="model"
+            rules={[
+              {
+                required: true,
+                message: "Please select a model!",
+              },
+            ]}
+          >
+            <Select
+              style={{ maxWidth: 500 }}
+              options={modelOptions}
+              disabled={fetchingAudio}
+            />
+          </Form.Item>
 
-            <Form.Item label="Format" name="format">
-              <Select
-                style={{ width: 150 }}
-                options={formatOptions}
-                disabled={fetchingAudio}
-              />
-            </Form.Item>
-          </Space>
+          <Form.Item label="Format" name="format">
+            <Select
+              style={{ maxWidth: 500 }}
+              options={formatOptions}
+              disabled={fetchingAudio}
+            />
+          </Form.Item>
 
           <Form.Item label="Speed" name="speed">
-            <Slider min={0.25} max={4.0} step={0.01} disabled={fetchingAudio} />
+            <Row>
+              <Col span={16}>
+                <Slider
+                  value={speed}
+                  min={0.25}
+                  max={4.0}
+                  step={0.01}
+                  onChange={onSpeedChange}
+                  disabled={fetchingAudio}
+                />
+              </Col>
+              <Col span={4}>
+                <InputNumber
+                  min={0.25}
+                  max={4.0}
+                  style={{ margin: "0 16px" }}
+                  value={speed}
+                  onChange={onSpeedChange}
+                  disabled={fetchingAudio}
+                />
+              </Col>
+            </Row>
           </Form.Item>
 
           {!audioUrl && !error && (
-            <Form.Item wrapperCol={{ span: 8, offset: 10 }}>
+            <Form.Item>
               <Button type="primary" htmlType="submit" loading={fetchingAudio}>
                 Generate Audio File
               </Button>
@@ -180,12 +212,14 @@ const App = () => {
 
         {error && <Alert message={error} type="error" />}
 
-        {audioUrl && <AudioPlayer src={audioUrl} style={{ width: "75%" }} />}
+        {audioUrl && (
+          <AudioPlayer src={audioUrl} style={{ marginBottom: "30px" }} />
+        )}
 
-        <Space>
+        <Space style={{ marginBottom: "20px" }}>
           {(audioUrl || error) && (
             <Button
-              type="link"
+              type="primary"
               onClick={() => {
                 setAudioUrl();
                 setError();
@@ -201,26 +235,31 @@ const App = () => {
             </Button>
           )}
         </Space>
-
         {audioUrl && (
-          <Tooltip
-            title={
-              <>
-                Find pricing information{" "}
-                <a
-                  href="https://openai.com/pricing"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  here
-                </a>
-              </>
-            }
-            placement="bottom"
-          >
-            Estimated cost: ${calculateEstimatedUsage(textLength, modelType)}{" "}
-            USD
-          </Tooltip>
+          <Row>
+            <Col>
+              <Tooltip
+                title={
+                  <>
+                    Find pricing information{" "}
+                    <a
+                      href="https://openai.com/pricing"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                    >
+                      here
+                    </a>
+                  </>
+                }
+                placement="bottom"
+              >
+                <h3>
+                  Estimated cost: $
+                  {calculateEstimatedUsage(textLength, modelType)} USD
+                </h3>
+              </Tooltip>
+            </Col>
+          </Row>
         )}
       </div>
     </div>

@@ -1,20 +1,16 @@
 .App {
-  width: 100vw;
-  height: 100vh;
   display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  background-color: aliceblue;
+  overflow-x: hidden;
+  background-color: lavender;
+  padding: 50px 0px;
 }
 
 .container {
   height: 90%;
   width: 90%;
   position: relative;
-  display: flex;
-  flex-direction: column;
   justify-content: center;
   align-items: center;
 }
